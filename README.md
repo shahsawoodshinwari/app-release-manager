@@ -9,12 +9,12 @@ App Release Manager is a platform-agnostic Laravel package for tracking applicat
 distribution channels, and for enforcing per-application release and update policies (minimum build, minimum version,
 and force-update) based on semantic versions and build numbers.
 
-> **Status:** Beta. Supported versions are **PHP 8.1** and **Laravel 10** only. Other PHP/Laravel versions are not
-> tested or supported.
+> **Status:** Beta. Supported versions are **PHP 8.1 / 8.2** and **Laravel 10** only. Other PHP/Laravel versions are
+> not tested or supported.
 
 ## Requirements
 
-- PHP `8.1.*`
+- PHP `^8.1`
 - Laravel `^10.0`
 
 ## Installation
