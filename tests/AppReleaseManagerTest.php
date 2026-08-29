@@ -1,5 +1,7 @@
 <?php
 
+namespace Shaka\AppReleaseManager\Tests;
+
 use Shaka\AppReleaseManager\Database\Seeders\ReferenceDataSeeder;
 use Shaka\AppReleaseManager\Facades\AppReleaseManager;
 use Shaka\AppReleaseManager\Models\Application;
@@ -11,95 +13,105 @@ use Shaka\AppReleaseManager\Models\ReleaseDistributionStatus;
 use Shaka\AppReleaseManager\Models\ReleasePolicy;
 use Shaka\AppReleaseManager\Models\ReleaseType;
 
-beforeEach(function () {
-    $this->seed(ReferenceDataSeeder::class);
-});
+class AppReleaseManagerTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-it('seeds reference data from config', function () {
-    expect(Platform::count())->toBe(7);
-    expect(ReleaseDistributionStatus::count())->toBe(6);
-    expect(ReleaseType::query()->where('slug', 'feature')->exists())->toBeTrue();
-    expect(DistributionChannel::query()->where('slug', 'google-play')->exists())->toBeTrue();
-});
+        $this->seed(ReferenceDataSeeder::class);
+    }
 
-it('models a full application release hierarchy', function () {
-    $application = Application::factory()->create(['slug' => 'paline', 'name' => 'Paline']);
-    $platform = Platform::where('slug', 'android')->firstOrFail();
+    public function test_seeds_reference_data_from_config(): void
+    {
+        self::assertSame(7, Platform::count());
+        self::assertSame(6, ReleaseDistributionStatus::count());
+        self::assertTrue(ReleaseType::query()->where('slug', 'feature')->exists());
+        self::assertTrue(DistributionChannel::query()->where('slug', 'google-play')->exists());
+    }
 
-    $applicationPlatform = ApplicationPlatform::factory()->create([
-        'application_id' => $application->id,
-        'platform_id' => $platform->id,
-        'identifier' => 'com.paline.app',
-    ]);
+    public function test_models_a_full_application_release_hierarchy(): void
+    {
+        $application = Application::factory()->create(['slug' => 'paline', 'name' => 'Paline']);
+        $platform = Platform::where('slug', 'android')->firstOrFail();
 
-    $releaseType = ReleaseType::where('slug', 'feature')->firstOrFail();
+        $applicationPlatform = ApplicationPlatform::factory()->create([
+            'application_id' => $application->id,
+            'platform_id' => $platform->id,
+            'identifier' => 'com.paline.app',
+        ]);
 
-    $release = Release::factory()->create([
-        'application_platform_id' => $applicationPlatform->id,
-        'release_type_id' => $releaseType->id,
-        'version' => '2.4.0',
-        'build_number' => 220,
-        'title' => 'Feature ABC',
-    ]);
+        $releaseType = ReleaseType::where('slug', 'feature')->firstOrFail();
 
-    expect($applicationPlatform->application->is($application))->toBeTrue();
-    expect($applicationPlatform->platform->is($platform))->toBeTrue();
-    expect($release->applicationPlatform->is($applicationPlatform))->toBeTrue();
-    expect($release->releaseType->is($releaseType))->toBeTrue();
-    expect($application->applicationPlatforms)->toHaveCount(1);
-});
+        $release = Release::factory()->create([
+            'application_platform_id' => $applicationPlatform->id,
+            'release_type_id' => $releaseType->id,
+            'version' => '2.4.0',
+            'build_number' => 220,
+            'title' => 'Feature ABC',
+        ]);
 
-it('resolves the latest release and enforces the build policy', function () {
-    $application = Application::factory()->create(['slug' => 'paline']);
-    $platform = Platform::where('slug', 'android')->firstOrFail();
+        self::assertTrue($applicationPlatform->application->is($application));
+        self::assertTrue($applicationPlatform->platform->is($platform));
+        self::assertTrue($release->applicationPlatform->is($applicationPlatform));
+        self::assertTrue($release->releaseType->is($releaseType));
+        self::assertCount(1, $application->applicationPlatforms);
+    }
 
-    $applicationPlatform = ApplicationPlatform::factory()->create([
-        'application_id' => $application->id,
-        'platform_id' => $platform->id,
-        'identifier' => 'com.paline.app',
-    ]);
+    public function test_resolves_latest_release_and_enforces_build_policy(): void
+    {
+        $application = Application::factory()->create(['slug' => 'paline']);
+        $platform = Platform::where('slug', 'android')->firstOrFail();
 
-    $releaseType = ReleaseType::where('slug', 'feature')->firstOrFail();
+        $applicationPlatform = ApplicationPlatform::factory()->create([
+            'application_id' => $application->id,
+            'platform_id' => $platform->id,
+            'identifier' => 'com.paline.app',
+        ]);
 
-    Release::factory()->create([
-        'application_platform_id' => $applicationPlatform->id,
-        'release_type_id' => $releaseType->id,
-        'version' => '2.4.0',
-        'build_number' => 220,
-    ]);
+        $releaseType = ReleaseType::where('slug', 'feature')->firstOrFail();
 
-    Release::factory()->create([
-        'application_platform_id' => $applicationPlatform->id,
-        'release_type_id' => $releaseType->id,
-        'version' => '2.4.1',
-        'build_number' => 221,
-    ]);
+        Release::factory()->create([
+            'application_platform_id' => $applicationPlatform->id,
+            'release_type_id' => $releaseType->id,
+            'version' => '2.4.0',
+            'build_number' => 220,
+        ]);
 
-    ReleasePolicy::factory()->create([
-        'application_platform_id' => $applicationPlatform->id,
-        'minimum_build_number' => 220,
-        'recommended_build_number' => 221,
-    ]);
+        Release::factory()->create([
+            'application_platform_id' => $applicationPlatform->id,
+            'release_type_id' => $releaseType->id,
+            'version' => '2.4.1',
+            'build_number' => 221,
+        ]);
 
-    expect(AppReleaseManager::latestRelease('paline', 'android')->build_number)->toBe(221);
-    expect(AppReleaseManager::checkBuild('paline', 'android', 221))->toBe('supported');
-    expect(AppReleaseManager::checkBuild('paline', 'android', 220))->toBe('update-available');
-    expect(AppReleaseManager::checkBuild('paline', 'android', 219))->toBe('unsupported');
-    expect(AppReleaseManager::isSupported('paline', 'android', 221))->toBeTrue();
-    expect(AppReleaseManager::isSupported('paline', 'android', 219))->toBeFalse();
-    expect(AppReleaseManager::requiresUpdate('paline', 'android', 220))->toBeTrue();
-    expect(AppReleaseManager::requiresUpdate('paline', 'android', 221))->toBeFalse();
-});
+        ReleasePolicy::factory()->create([
+            'application_platform_id' => $applicationPlatform->id,
+            'minimum_build_number' => 220,
+            'recommended_build_number' => 221,
+        ]);
 
-it('returns supported when no policy exists', function () {
-    $application = Application::factory()->create(['slug' => 'paline']);
-    $platform = Platform::where('slug', 'ios')->firstOrFail();
+        self::assertSame(221, AppReleaseManager::latestRelease('paline', 'android')->build_number);
+        self::assertSame('supported', AppReleaseManager::checkBuild('paline', 'android', 221));
+        self::assertSame('update-available', AppReleaseManager::checkBuild('paline', 'android', 220));
+        self::assertSame('unsupported', AppReleaseManager::checkBuild('paline', 'android', 219));
+        self::assertTrue(AppReleaseManager::isSupported('paline', 'android', 221));
+        self::assertFalse(AppReleaseManager::isSupported('paline', 'android', 219));
+        self::assertTrue(AppReleaseManager::requiresUpdate('paline', 'android', 220));
+        self::assertFalse(AppReleaseManager::requiresUpdate('paline', 'android', 221));
+    }
 
-    ApplicationPlatform::factory()->create([
-        'application_id' => $application->id,
-        'platform_id' => $platform->id,
-        'identifier' => 'com.paline.ios',
-    ]);
+    public function test_returns_supported_when_no_policy_exists(): void
+    {
+        $application = Application::factory()->create(['slug' => 'paline']);
+        $platform = Platform::where('slug', 'ios')->firstOrFail();
 
-    expect(AppReleaseManager::checkBuild('paline', 'ios', 1))->toBe('supported');
-});
+        ApplicationPlatform::factory()->create([
+            'application_id' => $application->id,
+            'platform_id' => $platform->id,
+            'identifier' => 'com.paline.ios',
+        ]);
+
+        self::assertSame('supported', AppReleaseManager::checkBuild('paline', 'ios', 1));
+    }
+}

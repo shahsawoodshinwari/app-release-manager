@@ -5,15 +5,16 @@
 [![GitHub Code Style Action Status](https://github.com/shaka/app-release-manager/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
 
-A platform-agnostic Laravel package for managing application releases: applications, platforms, distribution
-channels, releases, release distributions, distribution statuses, and per-application release policies.
+App Release Manager is a platform-agnostic Laravel package for tracking application releases across platforms and
+distribution channels, and for enforcing per-application release and update policies (minimum build, minimum version,
+and force-update) based on semantic versions and build numbers.
 
-> **Status:** Beta. Currently supports **Laravel 10** only. Support for Laravel 11/12/13 will ship as separate
-> major-version branches.
+> **Status:** Beta. Supported versions are **PHP 8.1** and **Laravel 10** only. Other PHP/Laravel versions are not
+> tested or supported.
 
 ## Requirements
 
-- PHP `^8.1`
+- PHP `8.1.*`
 - Laravel `^10.0`
 
 ## Installation
