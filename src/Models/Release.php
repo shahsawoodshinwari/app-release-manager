@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $application_platform_id
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $build_number
  * @property string|null $title
  * @property string|null $release_notes
- * @property \Illuminate\Support\Carbon|null $released_at
+ * @property Carbon|null $released_at
  * @property bool $is_active
  */
 class Release extends Model

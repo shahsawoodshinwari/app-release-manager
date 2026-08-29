@@ -4,6 +4,7 @@ use Shaka\AppReleaseManager\Database\Seeders\ReferenceDataSeeder;
 use Shaka\AppReleaseManager\Facades\AppReleaseManager;
 use Shaka\AppReleaseManager\Models\Application;
 use Shaka\AppReleaseManager\Models\ApplicationPlatform;
+use Shaka\AppReleaseManager\Models\DistributionChannel;
 use Shaka\AppReleaseManager\Models\Platform;
 use Shaka\AppReleaseManager\Models\Release;
 use Shaka\AppReleaseManager\Models\ReleaseDistributionStatus;
@@ -18,7 +19,7 @@ it('seeds reference data from config', function () {
     expect(Platform::count())->toBe(7);
     expect(ReleaseDistributionStatus::count())->toBe(6);
     expect(ReleaseType::query()->where('slug', 'feature')->exists())->toBeTrue();
-    expect(\Shaka\AppReleaseManager\Models\DistributionChannel::query()->where('slug', 'google-play')->exists())->toBeTrue();
+    expect(DistributionChannel::query()->where('slug', 'google-play')->exists())->toBeTrue();
 });
 
 it('models a full application release hierarchy', function () {

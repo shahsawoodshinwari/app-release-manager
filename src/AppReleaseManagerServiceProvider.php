@@ -2,9 +2,9 @@
 
 namespace Shaka\AppReleaseManager;
 
+use Shaka\AppReleaseManager\Commands\AppReleaseManagerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Shaka\AppReleaseManager\Commands\AppReleaseManagerCommand;
 
 class AppReleaseManagerServiceProvider extends PackageServiceProvider
 {
