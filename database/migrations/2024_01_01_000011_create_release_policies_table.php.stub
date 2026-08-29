@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('release_policies', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('application_platform_id')->constrained('application_platforms');
+            
+            $table->unsignedBigInteger('minimum_build_number');
+            $table->unsignedBigInteger('recommended_build_number');
+            
+            $table->timestamps();
+
+            $table->unique(['application_platform_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('release_policies');
+    }
+};

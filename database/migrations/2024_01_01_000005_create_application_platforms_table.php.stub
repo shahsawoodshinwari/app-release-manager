@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('application_platforms', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('application_id')->constrained('applications');
+            $table->foreignId('platform_id')->constrained('platforms');
+            
+            $table->string('identifier');
+            $table->boolean('is_active')->default(true);
+
+            $table->timestamps();
+
+            $table->unique(['application_id', 'platform_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('application_platforms');
+    }
+};

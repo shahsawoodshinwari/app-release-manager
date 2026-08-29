@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('releases', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('application_platform_id')->constrained('application_platforms');
+            $table->foreignId('release_type_id')->constrained('release_types');
+            
+            $table->string('version', 50);
+            $table->unsignedBigInteger('build_number');
+            $table->string('title', 255)->nullable();
+            $table->text('release_notes')->nullable();
+            $table->timestamp('released_at')->nullable();
+            $table->boolean('is_active')->default(true);
+            
+            $table->timestamps();
+
+            $table->unique(['application_platform_id', 'build_number']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('releases');
+    }
+};
