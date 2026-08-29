@@ -1,8 +1,8 @@
 # App Release Manager
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
-[![GitHub Tests Action Status](https://github.com/shaka/app-release-manager/actions/workflows/run-tests.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://github.com/shaka/app-release-manager/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amaster)
+[![GitHub Tests Action Status](https://github.com/shahsawoodshinwari/app-release-manager/actions/workflows/run-tests.yml/badge.svg)](https://github.com/shahsawoodshinwari/app-release-manager/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://github.com/shahsawoodshinwari/app-release-manager/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shahsawoodshinwari/app-release-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
 
 App Release Manager is a platform-agnostic Laravel package for tracking application releases across platforms and
