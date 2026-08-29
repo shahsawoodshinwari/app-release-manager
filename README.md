@@ -1,19 +1,20 @@
 # App Release Manager
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
-[![GitHub Tests Action Status](https://github.com/spatie/package-app-release-manager-laravel/actions/workflows/run-tests.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://github.com/spatie/package-app-release-manager-laravel/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/shaka/app-release-manager/actions/workflows/run-tests.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://github.com/shaka/app-release-manager/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shaka/app-release-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+A platform-agnostic Laravel package for managing application releases: applications, platforms, distribution
+channels, releases, release distributions, distribution statuses, and per-application release policies.
 
-## Support us
+> **Status:** Beta. Currently supports **Laravel 10** only. Support for Laravel 11/12/13 will ship as separate
+> major-version branches.
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/app-release-manager.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/app-release-manager)
+## Requirements
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- PHP `^8.1`
+- Laravel `^10.0`
 
 ## Installation
 
@@ -36,25 +37,48 @@ You can publish the config file with:
 php artisan vendor:publish --tag="app-release-manager-config"
 ```
 
-This is the contents of the published config file:
+The config holds the reference data (platforms, distribution channel types, distribution channels, release types,
+and release distribution statuses) that is inserted by the seeder.
 
-```php
-return [
-];
-```
+## Seeding reference data
 
-Optionally, you can publish the views using
+Run the seeder to populate the reference tables:
 
 ```bash
-php artisan vendor:publish --tag="app-release-manager-views"
+php artisan arm:seed-reference-data
 ```
 
 ## Usage
 
+The package exposes a `AppReleaseManager` facade with a small, convention-based query API.
+
 ```php
-$appReleaseManager = new Shaka\AppReleaseManager();
-echo $appReleaseManager->echoPhrase('Hello, Shaka!');
+use Shaka\AppReleaseManager\Facades\AppReleaseManager;
+
+// Resolve the application and a platform binding
+$app = AppReleaseManager::application('paline');
+$platform = AppReleaseManager::applicationPlatform('paline', 'android');
+
+// Latest release for an application/platform
+$latest = AppReleaseManager::latestRelease('paline', 'android');
+
+// Latest published distribution on a given channel
+$published = AppReleaseManager::latestPublishedDistribution('paline', 'android', 'google-play');
+
+// Policy checks (build-number based)
+$supported = AppReleaseManager::isSupported('paline', 'android', '220');   // true
+$requires = AppReleaseManager::requiresUpdate('paline', 'android', '219'); // true
 ```
+
+### Data model
+
+- `applications` — the apps you ship (e.g. `paline`).
+- `platforms` — `android`, `ios`, etc.
+- `distribution_channel_types` / `distribution_channels` — e.g. `app-store`, `google-play`, `github`.
+- `application_platforms` — pivot linking an application to a platform, carrying its release policy.
+- `releases` — a build/version for an application/platform.
+- `release_distributions` — a release pushed to a specific channel, with a `release_distribution_status`.
+- `release_policies` — min build / min version / force-update rules per application/platform.
 
 ## Testing
 
