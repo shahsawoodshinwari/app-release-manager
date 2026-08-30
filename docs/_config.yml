@@ -1,0 +1,38 @@
+title: Laravel App Release Manager
+description: Laravel package for mobile app release management, version checking, distribution channels, and force updates for Android and iOS.
+
+theme: just-the-docs
+
+url: https://shahsawoodshinwari.github.io
+baseurl: /app-release-manager
+
+color_scheme: dark
+
+aux_links:
+  "GitHub":
+    - "https://github.com/shahsawoodshinwari/app-release-manager"
+  "Packagist":
+    - "https://packagist.org/packages/shaka/app-release-manager"
+
+nav_sort: case_insensitive
+
+heading_anchors: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: 'Maintained by <a href="https://github.com/shahsawoodshinwari">Shah Sawood</a>.'
+
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - vendor/
+  - node_modules/
+  - build/
+  - tests/
+  - src/
+  - config/
+  - database/
+  - Gemfile
+  - Gemfile.lock
