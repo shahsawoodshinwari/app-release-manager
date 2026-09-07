@@ -49,18 +49,17 @@ App Release Manager provides the backend infrastructure for these use cases.
 
 Currently tested and supported:
 
-* PHP `8.1`
-* PHP `8.2`
-* PHP `8.3`
-* PHP `8.4`
-* Laravel `10`
+* PHP `8.1` — Laravel `10`
+* PHP `8.2` — Laravel `10`, `11`
+* PHP `8.3` — Laravel `10`, `11`
+* PHP `8.4` — Laravel `10`, `11`
 
 Other PHP or Laravel versions are currently not tested or officially supported.
 
 ## Requirements
 
 * PHP `^8.1`
-* Laravel `^10.0`
+* Laravel `^10.0|^11.0`
 
 ## Installation
 
