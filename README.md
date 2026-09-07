@@ -48,7 +48,7 @@ App Release Manager provides the backend infrastructure for these use cases.
 
 | Package | Laravel | PHP |
 |---------|---------|-----|
-| 1.x | 10.x, 11.x | ^8.1 |
+| 1.x | 10.x, 11.x, 12.x | ^8.1 |
 
 Only the latest major version receives new features and bug fixes.
 
