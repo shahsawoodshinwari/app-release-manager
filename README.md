@@ -4,6 +4,7 @@
 [![GitHub Tests Action Status](https://github.com/shahsawoodshinwari/app-release-manager/actions/workflows/run-tests.yml/badge.svg)](https://github.com/shahsawoodshinwari/app-release-manager/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![GitHub Code Style Action Status](https://github.com/shahsawoodshinwari/app-release-manager/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/shahsawoodshinwari/app-release-manager/actions?query=workflow%3A%22Fix+PHP+code+style+issues%22+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
+[![Laravel Version](https://badge.laravel.team/packagist/v/shaka/app-release-manager.svg?style=flat-square)](https://packagist.org/packages/shaka/app-release-manager)
 
 **App Release Manager** is a Laravel package for managing mobile and application releases, versions, distribution channels, and update policies from your Laravel backend.
 
@@ -43,18 +44,13 @@ App Release Manager provides the backend infrastructure for these use cases.
 * 🔌 **Simple Laravel API** — Query release information through a small, convention-based facade.
 * 🧩 **Platform agnostic** — Designed to work with mobile applications, desktop applications, or other clients that expose a version/build number.
 
-## Supported Versions
+## Version Compatibility
 
-> **Status:** Stable.
+| Package | Laravel | PHP |
+|---------|---------|-----|
+| 1.x | 10.x, 11.x | ^8.1 |
 
-Currently tested and supported:
-
-* PHP `8.1` — Laravel `10`
-* PHP `8.2` — Laravel `10`, `11`
-* PHP `8.3` — Laravel `10`, `11`
-* PHP `8.4` — Laravel `10`, `11`
-
-Other PHP or Laravel versions are currently not tested or officially supported.
+Only the latest major version receives new features and bug fixes.
 
 ## Requirements
 
